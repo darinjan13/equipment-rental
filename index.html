@@ -45,7 +45,7 @@
       equipmentList = await res.json();
       const select = document.getElementById("equipment");
       select.innerHTML = "";
-      equipmentList.forEach(item => {
+      equipmentList.filter(item => item.status === "available").forEach(item => {
         const opt = document.createElement("option");
         opt.value = item.id;
         opt.textContent = `${item.name} (PHP ${item.daily_rate}/day)`;

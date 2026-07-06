@@ -114,6 +114,8 @@ def availability():
 
     available = []
     for item in EQUIPMENT:
+        if item["status"] != "available":
+            continue
         conflict = find_conflicting_booking(item["id"], from_date, to_date, bookings)
         if conflict is None:
             available.append(item)
@@ -127,6 +129,9 @@ def create_booking():
     equipment = get_equipment(data.get("equipment_id"))
     if equipment is None:
         return jsonify({"error": "Unknown equipment"}), 400
+
+    if equipment["status"] != "available":
+        return jsonify({"error": f"{equipment['name']} is currently under maintenance and cannot be booked"}), 400
 
     from_date = parse_date(data["from_date"])
     to_date = parse_date(data["to_date"])
